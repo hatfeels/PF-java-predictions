@@ -5,6 +5,6 @@ import lombok.Data;
 public @Data class Ronda {
 	
 	private String ronda;
-	private Partido[] partidos; 
+	private Partido[] partidos;
 
 }
