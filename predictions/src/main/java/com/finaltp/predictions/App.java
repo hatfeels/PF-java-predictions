@@ -19,10 +19,10 @@ public class App {
 
 		Scanner sc = new Scanner(System.in);
 		System.out.println("ingresa la ubicacion del archivo de resultados");
-		String rondasDir = "C:\\Users\\Ayrton\\Documents\\Ayrton\\Desarrollador Java UTN\\Proyecto final\\Resultados.csv";
+		String rondasDir = sc.nextLine();
 		System.out.println("el arcivo esta en => " + rondasDir);
-		Partido[] partidos = new Partido[2];
 		CSVReader rondasCSV;
+		Partido[] partidos = new Partido[2];
 		try {
 			rondasCSV = new CSVReader(new FileReader(rondasDir));
 			String[] fila = null;
@@ -52,7 +52,7 @@ public class App {
 		}
 
 		System.out.println("ingresa la ubicacion del archivo del pronostico");
-		String predicionesDir = "C:\\Users\\Ayrton\\Documents\\Ayrton\\Desarrollador Java UTN\\Proyecto final\\Pronostico.csv";
+		String predicionesDir = sc.nextLine();
 		System.out.println("el arcivo esta en => " + predicionesDir);
 		Pronostico[] pronosticos = new Pronostico[2];
 		CSVReader pronosticoCSV;
@@ -63,22 +63,18 @@ public class App {
 			try {
 				int cont = 0;
 				while ((fila = pronosticoCSV.readNext()) != null) {
-
-					if (fila[1] == "X") {
-						System.out.println("GANA");
+					if ( "x".equalsIgnoreCase(fila[1])){
 						 result = Resultado.GANA;
 					}
-					else if (fila[2].toString() == "X") {
-						System.out.println("EMPATA");
+					else if ("x".equalsIgnoreCase(fila[2])) {
 						 result = Resultado.EMPATA;
 					}
-					else if (fila[3].toString() == "X") {
-						System.out.println("PIERDE");
+					else if ("x".equalsIgnoreCase(fila[3])) {
 						 result = Resultado.PIERDE;
 					}
-					
 					System.out.println(fila[0] + " | " + fila[1] + " | " + fila[2] + " | " + fila[3] + " | " + fila[4]);
 					pronosticos[cont] = new Pronostico(partidos[cont], partidos[cont].getEquipo1(), result);
+					cont = cont +1;
 				}
 			} catch (CsvValidationException e) {
 				// TODO Auto-generated catch block
@@ -93,7 +89,6 @@ public class App {
 			e.printStackTrace();
 		}
 		
-		sc.close();
 		
 		// funcion para hacer el puntaje obtenido
 		
@@ -105,10 +100,9 @@ public class App {
 				puntaje = puntaje + 1;
 			}
 		}
+		sc.close();
 		
 		System.out.print(puntaje);
-
-//		int result = pronostico1.getPartido().getResultado(pronostico1.getEquipo()).compareTo(pronostico1.getResultado().toString());
 
 	}
 
