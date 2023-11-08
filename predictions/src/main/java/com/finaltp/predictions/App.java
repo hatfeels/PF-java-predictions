@@ -23,15 +23,34 @@ public class App {
 		String rondasDir = "C:\\Users\\Ayrton\\Documents\\Ayrton\\Desarrollador Java UTN\\Proyecto final\\ResultadosCompleto.csv";
 		System.out.println("el arcivo esta en => " + rondasDir);
 		CSVReader rondasCSV;
-		Partido[] partidos = new Partido[2];
-		Ronda[] torneo = null;
+		Partido[] partidos;
+		int contR = 0;
+		Ronda[] torneo = new Ronda[contR];
 		
 		try {
 			rondasCSV = new CSVReader(new FileReader(rondasDir));
 			String[] fila = null;
+			String ronda = null;
+			int contP = 0;
+			partidos = new Partido[contP];
 			while((fila = rondasCSV.readNext()) != null) {
 				System.out.println(fila[0] + " | " + fila[1] + " | " + fila[2] + " | " + fila[3] + " | " + fila[4]);
+				if(ronda.equalsIgnoreCase(fila[0])) {
+					
+				}else {
+					ronda = fila[0];
+					contR++;
+				}
+				
+				
 			}
+			for(Ronda ronda1: torneo) {
+				System.out.println(ronda1.getRonda());
+				for(Partido partido: partidos) {
+					System.out.println(partido.getEquipo1());
+				}
+			}
+			
 		}catch (CsvValidationException e){
 			
 		}
