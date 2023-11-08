@@ -14,5 +14,12 @@ public @Data class Pronostico {
 		this.setPartido(partido);
 		this.setResultado(resultado);
 	}
-
+	
+	public Boolean puntua() {
+		if(this.resultado.toString().compareTo(partido.getResultado(this.equipo)) != 0) {
+			return false;
+		}else {
+			return true;
+		}
+	}
 }
