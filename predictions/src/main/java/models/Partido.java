@@ -42,7 +42,4 @@ public @Data class Partido {
 			}
 		}
 	}
-
-
-
 }
