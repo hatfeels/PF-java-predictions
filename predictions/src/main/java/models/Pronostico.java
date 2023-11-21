@@ -4,7 +4,6 @@ import lombok.Data;
 
 public @Data class Pronostico {
 	
-	
 	private Partido partido;
 	private Equipo equipo;
 	private Resultado resultado;
@@ -16,6 +15,11 @@ public @Data class Pronostico {
 	}
 	
 	public Boolean puntua() {
+//		System.out.println(partido.toString());
+//		System.out.println(equipo.getNombre());
+//		System.out.println(resultado);
+//		System.out.println(this.resultado.toString().compareTo(partido.getResultado(this.equipo)) == 0);
+//		System.out.println();
 		if(this.resultado.toString().compareTo(partido.getResultado(this.equipo)) != 0) {
 			return false;
 		}else {

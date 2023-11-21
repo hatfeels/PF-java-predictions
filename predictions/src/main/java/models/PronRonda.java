@@ -1,12 +1,15 @@
 package models;
 
+import java.util.ArrayList;
+
 import lombok.Data;
 
 public @Data class PronRonda {
 	
-	private Pronostico[] pronosticos;
 	
-	public PronRonda (Pronostico[] pronosticos) {
+	private ArrayList<Pronostico> pronosticos;
+	
+	public PronRonda (ArrayList<Pronostico> pronosticos) {
 		this.setPronosticos(pronosticos);
 	}
 
@@ -17,7 +20,7 @@ public @Data class PronRonda {
 				parcial++;
 			}
 		}
-		if(parcial == pronosticos.length) {
+		if(parcial == pronosticos.size()) {
 			parcial = parcial + 2;
 		}
 		return parcial;
