@@ -23,8 +23,8 @@ public class App {
 //	     ------------------------Torneo---------------------------
 
 		System.out.println("ingresa la ubicacion del archivo de resultados");
-		String rondasDir = "C:\\Users\\Ayrton\\Documents\\Ayrton\\Desarrollador Java UTN\\Proyecto final\\ResultadosCompleto.csv";
-//		String rondasDir = sc.nextLine();
+//		String rondasDir = "C:\\Users\\Ayrton\\Documents\\Ayrton\\Desarrollador Java UTN\\Proyecto final\\ResultadosCompleto.csv";
+		String rondasDir = sc.nextLine();
 		System.out.println("el arcivo esta en => " + rondasDir);
 		CSVReader rondasCSV;
 		ArrayList<Ronda> torneo = new ArrayList<Ronda>();
@@ -67,8 +67,8 @@ public class App {
 //     ------------------------Pronostico---------------------------
 
 		System.out.println("ingresa la ubicacion del archivo del pronostico");
-		String predicionesDir = "C:\\Users\\Ayrton\\Documents\\Ayrton\\Desarrollador Java UTN\\Proyecto final\\PronosticoCompleto.csv";
-//		String predicionesDir = sc.nextLine();
+//		String predicionesDir = "C:\\Users\\Ayrton\\Documents\\Ayrton\\Desarrollador Java UTN\\Proyecto final\\PronosticoCompleto.csv";
+		String predicionesDir = sc.nextLine();
 		System.out.println("el arcivo esta en => " + predicionesDir);
 
 		CSVReader pronosticoCSV;
@@ -116,7 +116,6 @@ public class App {
 			}
 			predictTorneo.add(new PronRonda(predictRonda));
 			participantes.add(new Persona(personaActial, predictTorneo));
-			System.out.println(participantes);
 			
 			for (Persona puntos : participantes) {
 				System.out.println(puntos.getNombre() + ": "+puntos.getPuntajeTotal());
