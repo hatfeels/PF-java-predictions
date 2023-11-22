@@ -42,7 +42,7 @@ public @Data class Partido {
 			}
 		}
 	}
-	
+
 //	public String toString() {
 //		return this.getEquipo1().getNombre() + " VS " + this.getEquipo2().getNombre();
 //	}

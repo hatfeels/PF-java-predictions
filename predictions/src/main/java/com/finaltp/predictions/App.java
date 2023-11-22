@@ -1,6 +1,7 @@
 package com.finaltp.predictions;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -11,14 +12,37 @@ import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvValidationException;
 
 import models.*;
+import com.finaltp.predictions.config.*;
 
 public class App {
 
 	public static void main(String[] args) throws IOException {
 
+
 		// lee y setea las derecciones de los archivos CSV
 
 		Scanner sc = new Scanner(System.in);
+		
+//		-------------------------Configuracion--------------------------
+		
+		System.out.println("ingresa la ubicacion del archivo de configuracion");
+		String configuracionDir = sc.nextLine();
+		CSVReader configuracion = new CSVReader(new FileReader(configuracionDir));
+		Configuracion config;
+		try {
+			List<String[]> datos = configuracion.readAll();
+			config = new Configuracion(datos);
+			for(String[] line: datos) {
+				for(String e : line) {
+					System.out.print(e+" | ");
+				}
+				System.out.println();
+			}
+			
+		}catch (CsvException e) {
+			e.printStackTrace();
+		}
+		configuracion.close();
 
 //	     ------------------------Torneo---------------------------
 
@@ -83,7 +107,6 @@ public class App {
 			int rondaActual = 1;
 			int partidoActual = 0;
 
-
 			for (String[] pronostico : datos) {
 
 				if (personaActial == null)
@@ -116,9 +139,9 @@ public class App {
 			}
 			predictTorneo.add(new PronRonda(predictRonda));
 			participantes.add(new Persona(personaActial, predictTorneo));
-			
+
 			for (Persona puntos : participantes) {
-				System.out.println(puntos.getNombre() + ": "+puntos.getPuntajeTotal());
+				System.out.println(puntos.getNombre() + ": " + puntos.getPuntajeTotal());
 			}
 
 		} catch (IOException e) {
@@ -149,20 +172,21 @@ public class App {
 			result = Resultado.PIERDE;
 		}
 
-	    if (partido != null) {
-	        predictRonda.add(new Pronostico(partido, new Equipo(pronostico[2]), result));
+		if (partido != null) {
+			predictRonda.add(new Pronostico(partido, new Equipo(pronostico[2]), result));
 //	        System.out.println(predictRonda.toString());
-	    } else {
-	        System.out.println("Error: No se encontró el partido correspondiente para el pronóstico.");
-	    }
+		} else {
+			System.out.println("Error: No se encontró el partido correspondiente para el pronóstico.");
+		}
 	}
+
 	static Partido buscarPartido(ArrayList<Ronda> torneo, int rondaActual, String equipoLocal, String equipoVisitante) {
-	    for (Partido partido : torneo.get(rondaActual - 1).getPartidos()) {
-	        if (partido.getEquipo1().getNombre().equalsIgnoreCase(equipoLocal)
-	                && partido.getEquipo2().getNombre().equalsIgnoreCase(equipoVisitante)) {
-	            return partido;
-	        }
-	    }
-	    return null; 
+		for (Partido partido : torneo.get(rondaActual - 1).getPartidos()) {
+			if (partido.getEquipo1().getNombre().equalsIgnoreCase(equipoLocal)
+					&& partido.getEquipo2().getNombre().equalsIgnoreCase(equipoVisitante)) {
+				return partido;
+			}
+		}
+		return null;
 	}
 }
