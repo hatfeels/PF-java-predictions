@@ -1,9 +1,18 @@
 package models;
 
 import lombok.Data;
+import javax.persistence.*;
 
+@Entity
+@Table(name="PARTIDO")
 public @Data class Partido {
 
+	@Id
+	@Column(name="id")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int id;
+	
+	
 	private Equipo equipo1;
 	private Equipo equipo2;
 	private int golesEquipo1;
@@ -43,7 +52,4 @@ public @Data class Partido {
 		}
 	}
 
-//	public String toString() {
-//		return this.getEquipo1().getNombre() + " VS " + this.getEquipo2().getNombre();
-//	}
 }
