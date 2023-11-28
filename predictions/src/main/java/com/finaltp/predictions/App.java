@@ -1,18 +1,26 @@
 package com.finaltp.predictions;
 
+import java.io.FileReader;
 import java.io.IOException;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import java.io.*;
-import com.opencsv.*;
+import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
-import com.opencsv.exceptions.CsvValidationException;
 
 import models.*;
+import com.finaltp.predictions.config.*;
 
 public class App {
+	static Configuracion config;
+	static Connection DB;
+	static Statement stmt;
 
 	public static void main(String[] args) throws IOException {
 
@@ -20,11 +28,43 @@ public class App {
 
 		Scanner sc = new Scanner(System.in);
 
-//	     ------------------------Torneo---------------------------
+//		-------------------------Configuracion--------------------------
+
+		System.out.println("ingresa la ubicacion del archivo de configuracion");
+//		String configuracionDir = sc.nextLine();
+		String configuracionDir = "C:\\Users\\Ayrton\\Documents\\Ayrton\\Desarrollador Java UTN\\Proyecto final\\config.csv";
+		CSVReader configuracion = new CSVReader(new FileReader(configuracionDir));
+
+		try {
+			List<String[]> datos = configuracion.readAll();
+			config = Configuracion.getConfig(datos);
+			for (String[] line : datos) {
+				for (String e : line) {
+					System.out.print(e + " | ");
+				}
+				System.out.println();
+			}
+
+		} catch (CsvException e) {
+			e.printStackTrace();
+		}
+		configuracion.close();
+
+//		------------------------conexion con la base de datos------------------------------
+
+		DB = ConecctionDB.getConexion();
+		try {
+			stmt = DB.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+//	    -------------------------Torneo---------------------------
 
 		System.out.println("ingresa la ubicacion del archivo de resultados");
-//		String rondasDir = "C:\\Users\\Ayrton\\Documents\\Ayrton\\Desarrollador Java UTN\\Proyecto final\\ResultadosCompleto.csv";
-		String rondasDir = sc.nextLine();
+		String rondasDir = "C:\\Users\\Ayrton\\Documents\\Ayrton\\Desarrollador Java UTN\\Proyecto final\\ResultadosCompleto.csv";
+//		String rondasDir = sc.nextLine();
 		System.out.println("el arcivo esta en => " + rondasDir);
 		CSVReader rondasCSV;
 		ArrayList<Ronda> torneo = new ArrayList<Ronda>();
@@ -44,10 +84,10 @@ public class App {
 					torneo.add(new Ronda(partido[0], ronda));
 					rondaActual++;
 				}
-				for (String ele : partido) {
-					System.out.print(ele + " | ");
-				}
-				System.out.println();
+//				for (String ele : partido) {
+//					System.out.print(ele + " | ");
+//				}
+//				System.out.println();
 			}
 			torneo.add(new Ronda(Integer.toString(rondaActual), ronda));
 
@@ -67,8 +107,8 @@ public class App {
 //     ------------------------Pronostico---------------------------
 
 		System.out.println("ingresa la ubicacion del archivo del pronostico");
-//		String predicionesDir = "C:\\Users\\Ayrton\\Documents\\Ayrton\\Desarrollador Java UTN\\Proyecto final\\PronosticoCompleto.csv";
-		String predicionesDir = sc.nextLine();
+		String predicionesDir = "C:\\Users\\Ayrton\\Documents\\Ayrton\\Desarrollador Java UTN\\Proyecto final\\PronosticoCompleto.csv";
+//		String predicionesDir = sc.nextLine();
 		System.out.println("el arcivo esta en => " + predicionesDir);
 
 		CSVReader pronosticoCSV;
@@ -82,7 +122,6 @@ public class App {
 			String personaActial = null;
 			int rondaActual = 1;
 			int partidoActual = 0;
-
 
 			for (String[] pronostico : datos) {
 
@@ -109,17 +148,17 @@ public class App {
 					crearPredict(pronostico, torneo, rondaActual, partidoActual, predictRonda);
 				}
 
-				for (String p : pronostico) {
-					System.out.print(p + " | ");
-				}
-				System.out.println();
+//				for (String p : pronostico) {
+//					System.out.print(p + " | ");
+//				}
+//				System.out.println();
 			}
 			predictTorneo.add(new PronRonda(predictRonda));
 			participantes.add(new Persona(personaActial, predictTorneo));
-			
-			for (Persona puntos : participantes) {
-				System.out.println(puntos.getNombre() + ": "+puntos.getPuntajeTotal());
-			}
+
+//			for (Persona puntos : participantes) {
+//				System.out.println(puntos.getNombre() + ": " + puntos.getPuntajeTotal());
+//			}
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -149,20 +188,21 @@ public class App {
 			result = Resultado.PIERDE;
 		}
 
-	    if (partido != null) {
-	        predictRonda.add(new Pronostico(partido, new Equipo(pronostico[2]), result));
+		if (partido != null) {
+			predictRonda.add(new Pronostico(partido, new Equipo(pronostico[2]), result));
 //	        System.out.println(predictRonda.toString());
-	    } else {
-	        System.out.println("Error: No se encontró el partido correspondiente para el pronóstico.");
-	    }
+		} else {
+			System.out.println("Error: No se encontró el partido correspondiente para el pronóstico.");
+		}
 	}
+
 	static Partido buscarPartido(ArrayList<Ronda> torneo, int rondaActual, String equipoLocal, String equipoVisitante) {
-	    for (Partido partido : torneo.get(rondaActual - 1).getPartidos()) {
-	        if (partido.getEquipo1().getNombre().equalsIgnoreCase(equipoLocal)
-	                && partido.getEquipo2().getNombre().equalsIgnoreCase(equipoVisitante)) {
-	            return partido;
-	        }
-	    }
-	    return null; 
+		for (Partido partido : torneo.get(rondaActual - 1).getPartidos()) {
+			if (partido.getEquipo1().getNombre().equalsIgnoreCase(equipoLocal)
+					&& partido.getEquipo2().getNombre().equalsIgnoreCase(equipoVisitante)) {
+				return partido;
+			}
+		}
+		return null;
 	}
 }
